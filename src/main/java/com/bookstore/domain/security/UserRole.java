@@ -23,7 +23,7 @@ public class UserRole {
     @JoinColumn(name = "roleId")
     private Role role;
 
-    private UserRole(User user, Role role) {
+    public UserRole(User user, Role role) {
         this.user = user;
         this.role = role;
     }

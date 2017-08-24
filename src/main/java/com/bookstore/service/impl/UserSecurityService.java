@@ -1,4 +1,4 @@
-package com.bookstore.service;
+package com.bookstore.service.impl;
 
 import com.bookstore.domain.User;
 import com.bookstore.repository.UserRepository;
@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserSecurityService implements UserDetailsService{
+public class UserSecurityService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -17,7 +17,8 @@ public class UserSecurityService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if (user == null) {
+
+        if (null == user) {
             throw new UsernameNotFoundException("Username not found");
         }
         return user;

@@ -4,7 +4,6 @@ import com.bookstore.domain.User;
 import lombok.Data;
 
 import javax.persistence.*;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,7 +21,7 @@ public class PasswordResetToken {
 
     private String token;
 
-    @OneToMany(targetEntity = User.class, fetch = EAGER)
+    @OneToOne(targetEntity = User.class, fetch = EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
@@ -30,16 +29,17 @@ public class PasswordResetToken {
 
     public PasswordResetToken(final String token, final User user) {
         super();
+
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(calendar.getTime().getTime());
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(new Date().getTime());
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
     }
 
     public void updateToken(final String token) {

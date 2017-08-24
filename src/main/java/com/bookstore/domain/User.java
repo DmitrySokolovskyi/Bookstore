@@ -19,7 +19,7 @@ import static javax.persistence.GenerationType.AUTO;
 
 @Entity
 @Data @NoArgsConstructor
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @Id @GeneratedValue(strategy = AUTO)
     @Column(name = "id", nullable = false, updatable = false)
