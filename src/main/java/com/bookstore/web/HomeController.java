@@ -8,6 +8,13 @@ import com.bookstore.service.UserService;
 import com.bookstore.service.impl.UserSecurityService;
 import com.bookstore.util.MailConstructor;
 import com.bookstore.util.SecurityUtil;
+
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,28 +28,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
-
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public class HomeController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserSecurityService userSecurityService;
-
-    @Autowired
     private JavaMailSender mailSender;
 
     @Autowired
     private MailConstructor mailConstructor;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserSecurityService userSecurityService;
 
     @RequestMapping("/")
     public String index() {
@@ -68,7 +69,7 @@ public class HomeController {
             @ModelAttribute("email") String userEmail,
             @ModelAttribute("username") String username,
             Model model
-            ) throws Exception {
+    ) throws Exception {
         model.addAttribute("classActiveNewAccount", true);
         model.addAttribute("email", userEmail);
         model.addAttribute("username", username);
@@ -80,7 +81,7 @@ public class HomeController {
         }
 
         if (userService.findByEmail(userEmail) != null) {
-            model.addAttribute("emailExists", true);
+            model.addAttribute("email", true);
 
             return "myAccount";
         }
@@ -109,10 +110,12 @@ public class HomeController {
         SimpleMailMessage email = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user, password);
 
         mailSender.send(email);
-        model.addAttribute("emailSent", true);
+
+        model.addAttribute("emailSent", "true");
 
         return "myAccount";
     }
+
 
     @RequestMapping("/newUser")
     public String newUser(Locale locale, @RequestParam("token") String token, Model model) {
@@ -133,6 +136,8 @@ public class HomeController {
                 userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        model.addAttribute("user", user);
 
         model.addAttribute("classActiveEdit", true);
         return "myProfile";
