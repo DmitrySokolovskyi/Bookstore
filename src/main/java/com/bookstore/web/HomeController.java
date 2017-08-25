@@ -6,8 +6,11 @@ import com.bookstore.domain.security.Role;
 import com.bookstore.domain.security.UserRole;
 import com.bookstore.service.UserService;
 import com.bookstore.service.impl.UserSecurityService;
+import com.bookstore.util.MailConstructor;
 import com.bookstore.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -33,6 +37,12 @@ public class HomeController {
 
     @Autowired
     private UserSecurityService userSecurityService;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private MailConstructor mailConstructor;
 
     @RequestMapping("/")
     public String index() {
@@ -89,8 +99,19 @@ public class HomeController {
         role.setName("ROLE_USER");
         Set<UserRole> userRoles = new HashSet<>();
         userRoles.add(new UserRole(user, role));
-//        userService.createUser(user, userRoles);
-        return null;
+        userService.createUser(user, userRoles);
+
+        String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+
+        String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+        SimpleMailMessage email = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user, password);
+
+        mailSender.send(email);
+        model.addAttribute("emailSent", true);
+
+        return "myAccount";
     }
 
     @RequestMapping("/newUser")

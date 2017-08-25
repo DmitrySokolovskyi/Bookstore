@@ -1,12 +1,42 @@
 package com.bookstore;
 
+import com.bookstore.domain.User;
+import com.bookstore.domain.security.Role;
+import com.bookstore.domain.security.UserRole;
+import com.bookstore.service.UserService;
+import com.bookstore.util.SecurityUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class BookstoreApplication {
+import java.util.HashSet;
+import java.util.Set;
 
-	public static void main(String[] args) {
-		SpringApplication.run(BookstoreApplication.class, args);
-	}
+@SpringBootApplication
+public class BookstoreApplication implements CommandLineRunner {
+
+    @Autowired
+    private UserService userService;
+
+    public static void main(String[] args) {
+        SpringApplication.run(BookstoreApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        User user1 = new User();
+        user1.setFirstName("User");
+        user1.setLastName("User");
+        user1.setUsername("user");
+        user1.setPassword(SecurityUtil.passwordEncoder().encode("user"));
+        user1.setEmail("user@gmail.com");
+        Set<UserRole> userRoles = new HashSet<>();
+        Role role1 = new Role();
+        role1.setRoleId(1);
+        role1.setName("ROLE_USER");
+        userRoles.add(new UserRole(user1, role1));
+
+        userService.createUser(user1, userRoles);
+    }
 }
