@@ -1,5 +1,7 @@
 package com.bookstore.domain.security;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +9,7 @@ import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
-@Entity
+@Entity @Data
 public class Role {
 
     @Id
@@ -17,27 +19,6 @@ public class Role {
     @OneToMany(mappedBy = "role", cascade = ALL, fetch = LAZY)
     private Set<UserRole> userRoles = new HashSet<>();
 
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
+    public Role() {
     }
 }

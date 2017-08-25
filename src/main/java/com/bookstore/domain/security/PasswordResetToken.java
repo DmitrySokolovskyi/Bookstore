@@ -10,8 +10,7 @@ import java.util.Date;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.AUTO;
 
-@Entity
-@Data
+@Entity @Data
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
