@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -36,14 +36,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/newUser",
             "/forgetPassword",
             "/login",
-            "/fonts/**"
+            "/fonts/**",
+            "/bookshelf",
+            "/bookDetail"
     };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests().
-		/*	antMatchers("/**").*/
+        /*	antMatchers("/**").*/
                 antMatchers(PUBLIC_MATCHERS).
                 permitAll().anyRequest().authenticated();
 

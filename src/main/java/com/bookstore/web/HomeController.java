@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
+import java.security.Principal;
 import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -64,6 +66,23 @@ public class HomeController {
         return "bookshelf";
     }
 
+    @RequestMapping("/bookDetail")
+    public String bookDetail(@PathParam("id") Long id, Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            User user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        Book book = bookService.findOne(id);
+        model.addAttribute("book", book);
+        List<Integer> qtyList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        model.addAttribute("qtyList", qtyList);
+        model.addAttribute("qty", 1);
+
+        return "bookDetail";
+    }
+
     @RequestMapping("/forgetPassword")
     public String forgetPassword(
             HttpServletRequest request,
@@ -90,7 +109,7 @@ public class HomeController {
         String token = UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
 
-        String appUrl = "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+        String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 
         SimpleMailMessage newEmail = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user, password);
 
@@ -102,13 +121,13 @@ public class HomeController {
         return "myAccount";
     }
 
-    @RequestMapping(value="/newUser", method = POST)
+    @RequestMapping(value = "/newUser", method = POST)
     public String newUserPost(
             HttpServletRequest request,
             @ModelAttribute("email") String userEmail,
             @ModelAttribute("username") String username,
             Model model
-    ) throws Exception{
+    ) throws Exception {
         model.addAttribute("classActiveNewAccount", true);
         model.addAttribute("email", userEmail);
         model.addAttribute("username", username);
@@ -144,7 +163,7 @@ public class HomeController {
         String token = UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
 
-        String appUrl = "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+        String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 
         SimpleMailMessage email = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user, password);
 
