@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
@@ -33,6 +34,13 @@ public class User implements UserDetails {
     private String email;
     private String phone;
     private boolean enabled = true;
+
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private List<UserShipping> userShippingList;
+
+
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private List<UserPayment> userPaymentList;
 
     @OneToMany(mappedBy = "user", cascade = ALL, fetch = EAGER)
     @JsonIgnore
