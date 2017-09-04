@@ -6,10 +6,7 @@ import com.bookstore.domain.UserPayment;
 import com.bookstore.domain.UserShipping;
 import com.bookstore.domain.security.PasswordResetToken;
 import com.bookstore.domain.security.UserRole;
-import com.bookstore.repository.PasswordResetTokenRepository;
-import com.bookstore.repository.RoleRepository;
-import com.bookstore.repository.UserPaymentRepository;
-import com.bookstore.repository.UserRepository;
+import com.bookstore.repository.*;
 import com.bookstore.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +31,9 @@ public class UserServiceImpl implements UserService {
     private UserPaymentRepository userPaymentRepository;
 
     @Autowired
+    private UserShippingRepository userShippingRepository;
+
+    @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
@@ -53,15 +53,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail (String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public User createUser(User user, Set<UserRole> userRoles){
+    public User createUser(User user, Set<UserRole> userRoles) {
         User localUser = userRepository.findByUsername(user.getUsername());
 
-        if(localUser != null) {
+        if (localUser != null) {
             LOG.info("user {} already exists. Nothing will be done.", user.getUsername());
         } else {
             for (UserRole ur : userRoles) {
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserShipping(UserShipping userShipping, User user){
+    public void updateUserShipping(UserShipping userShipping, User user) {
         userShipping.setUser(user);
         userShipping.setUserShippingDefault(true);
         user.getUserShippingList().add(userShipping);
@@ -100,11 +100,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void setUserDefaultShipping(Long userShippingId, User user) {
+        List<UserShipping> userShippingList = (List<UserShipping>) userShippingRepository.findAll();
+
+        for (UserShipping userShipping : userShippingList) {
+            if (userShipping.getId() == userShippingId) {
+                userShipping.setUserShippingDefault(true);
+                userShippingRepository.save(userShipping);
+            } else {
+                userShipping.setUserShippingDefault(false);
+                userShippingRepository.save(userShipping);
+            }
+        }
+    }
+
+    @Override
     public void setUserDefaultPayment(Long userPaymentId, User user) {
         List<UserPayment> userPaymentList = (List<UserPayment>) userPaymentRepository.findAll();
 
         for (UserPayment userPayment : userPaymentList) {
-            if(userPayment.getId() == userPaymentId) {
+            if (userPayment.getId() == userPaymentId) {
                 userPayment.setDefaultPayment(true);
                 userPaymentRepository.save(userPayment);
             } else {
