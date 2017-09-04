@@ -22,7 +22,6 @@ public class UserShipping {
     private String userShippingZipcode;
     private boolean userShippingDefault;
 
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

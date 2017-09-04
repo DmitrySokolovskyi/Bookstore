@@ -1,9 +1,12 @@
 package com.bookstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+
+import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -32,4 +35,8 @@ public class Book {
 
     @Transient
     private MultipartFile bookImage;
+
+    @OneToMany(mappedBy = "book")
+    @JsonIgnore
+    private List<BookToCartItem> bookToCartItemList;
 }
