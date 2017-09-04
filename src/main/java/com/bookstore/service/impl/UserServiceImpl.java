@@ -1,6 +1,8 @@
 package com.bookstore.service.impl;
 
 import com.bookstore.domain.User;
+import com.bookstore.domain.UserBilling;
+import com.bookstore.domain.UserPayment;
 import com.bookstore.domain.security.PasswordResetToken;
 import com.bookstore.domain.security.UserRole;
 import com.bookstore.repository.PasswordResetTokenRepository;
@@ -45,16 +47,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByEmail (String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public User createUser(User user, Set<UserRole> userRoles) throws Exception {
+    public User createUser(User user, Set<UserRole> userRoles){
         User localUser = userRepository.findByUsername(user.getUsername());
 
-        if (localUser != null) {
-            LOG.info("user {} already exists. Nothing will be done", user.getUsername());
+        if(localUser != null) {
+            LOG.info("user {} already exists. Nothing will be done.", user.getUsername());
         } else {
             for (UserRole ur : userRoles) {
                 roleRepository.save(ur.getRole());
@@ -72,4 +74,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public void updateUserBilling(UserBilling userBilling, UserPayment userPayment, User user) {
+        userPayment.setUser(user);
+        userPayment.setUserBilling(userBilling);
+        userPayment.setDefaultPayment(true);
+        userBilling.setUserPayment(userPayment);
+        user.getUserPaymentList().add(userPayment);
+        save(user);
+    }
 }

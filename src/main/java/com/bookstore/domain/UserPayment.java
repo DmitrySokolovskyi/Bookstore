@@ -1,13 +1,15 @@
 package com.bookstore.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
 
-@Entity @Data
+@Entity
+@Setter @Getter
 public class UserPayment {
 
     @Id @GeneratedValue(strategy = AUTO)
