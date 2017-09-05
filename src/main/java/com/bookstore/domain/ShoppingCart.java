@@ -1,7 +1,8 @@
 package com.bookstore.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,7 +12,8 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.AUTO;
 
-@Entity @Data
+@Entity
+@Setter @Getter
 public class ShoppingCart {
 
     @Id @GeneratedValue(strategy = AUTO)

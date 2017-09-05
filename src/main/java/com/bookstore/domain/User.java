@@ -3,8 +3,9 @@ package com.bookstore.domain;
 import com.bookstore.domain.security.Authority;
 import com.bookstore.domain.security.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,7 +20,8 @@ import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.AUTO;
 
 @Entity
-@Data @NoArgsConstructor
+@Setter @Getter
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id @GeneratedValue(strategy = AUTO)
