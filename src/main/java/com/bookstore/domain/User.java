@@ -35,6 +35,9 @@ public class User implements UserDetails {
     private String phone;
     private boolean enabled = true;
 
+    @OneToOne(cascade = ALL, mappedBy = "user")
+    private ShoppingCart shoppingCart;
+
     @OneToMany(cascade = ALL, mappedBy = "user")
     private List<UserShipping> userShippingList;
 
