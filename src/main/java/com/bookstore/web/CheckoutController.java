@@ -46,7 +46,7 @@ public class CheckoutController {
             @RequestParam("id") Long cartId,
             @RequestParam(value="missingRequiredField", required=false) boolean missingRequiredField,
             Model model, Principal principal
-            ){
+    ){
         User user = userService.findByUsername(principal.getName());
 
         if(cartId != user.getShoppingCart().getId()) {
@@ -123,7 +123,7 @@ public class CheckoutController {
     public String setShippingAddress(
             @RequestParam("userShippingId") Long userShippingId,
             Principal principal, Model model
-            ) {
+    ) {
         User user = userService.findByUsername(principal.getName());
         UserShipping userShipping = userShippingService.findById(userShippingId);
 
@@ -133,8 +133,6 @@ public class CheckoutController {
             shippingAddressService.setByUserShipping(userShipping, shippingAddress);
 
             List<CartItem> cartItemList = cartItemService.findByShoppingCart(user.getShoppingCart());
-
-            BillingAddress billingAddress = new BillingAddress();
 
             model.addAttribute("shippingAddress", shippingAddress);
             model.addAttribute("payment", payment);
@@ -172,7 +170,7 @@ public class CheckoutController {
     public String setPaymentMethod(
             @RequestParam("userPaymentId") Long userPaymentId,
             Principal principal, Model model
-            ) {
+    ) {
         User user = userService.findByUsername(principal.getName());
         UserPayment userPayment = userPaymentService.findById(userPaymentId);
         UserBilling userBilling = userPayment.getUserBilling();
