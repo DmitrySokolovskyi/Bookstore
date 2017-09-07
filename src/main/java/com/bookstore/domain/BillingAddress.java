@@ -16,7 +16,7 @@ public class BillingAddress {
     private Long id;
     private String billingAddressName;
     private String billingAddressStreet1;
-    private String userBillingStreet2;
+    private String billingAddressStreet2;
     private String billingAddressCity;
     private String billingAddressState;
     private String billingAddressCountry;
