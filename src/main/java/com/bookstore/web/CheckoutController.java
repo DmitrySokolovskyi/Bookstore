@@ -2,6 +2,7 @@ package com.bookstore.web;
 
 import com.bookstore.domain.*;
 import com.bookstore.service.*;
+import com.bookstore.util.MailConstructor;
 import com.bookstore.util.USConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,6 +29,9 @@ public class CheckoutController {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private MailConstructor mailConstructor;
 
     @Autowired
     private UserService userService;
@@ -167,9 +171,9 @@ public class CheckoutController {
 
         Order order = orderService.createOrder(shoppingCart, shippingAddress, billingAddress, payment, shippingMethod, user);
 
-//        mailSender.send(mailConstructor.constructOrderConfirmationEmail(user, order, Locale.ENGLISH));
-//
-//        shoppingCartService.clearShoppingCart(shoppingCart);
+        mailSender.send(mailConstructor.constructOrderConfirmationEmail(user, order, Locale.ENGLISH));
+
+        shoppingCartService.clearShoppingCart(shoppingCart);
 
         LocalDate today = LocalDate.now();
         LocalDate estimatedDeliveryDate;
