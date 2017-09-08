@@ -37,9 +37,6 @@ public class CheckoutController {
     private UserService userService;
 
     @Autowired
-    private OrderService orderService;
-
-    @Autowired
     private CartItemService cartItemService;
 
     @Autowired
@@ -59,6 +56,9 @@ public class CheckoutController {
 
     @Autowired
     private UserPaymentService userPaymentService;
+
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping("/checkout")
     public String checkout(@RequestParam("id") Long cartId,

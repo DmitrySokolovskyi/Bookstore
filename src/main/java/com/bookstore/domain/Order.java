@@ -1,9 +1,9 @@
 package com.bookstore.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
 
-@Entity @Data
+@Entity @Getter @Setter
 @Table(name = "user_order")
 public class Order {
 
