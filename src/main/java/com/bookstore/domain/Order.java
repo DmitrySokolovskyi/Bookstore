@@ -30,6 +30,9 @@ public class Order {
     private ShippingAddress shippingAddress;
 
     @OneToOne(cascade = ALL)
+    private BillingAddress billingAddress;
+
+    @OneToOne(cascade = ALL)
     private Payment payment;
 
     @ManyToOne

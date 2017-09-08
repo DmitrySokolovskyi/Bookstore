@@ -19,7 +19,6 @@ public class ShippingAddress {
     private String shippingAddressCountry;
     private String shippingAddressZipcode;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToOne
+    private Order order;
 }
