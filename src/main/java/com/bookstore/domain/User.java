@@ -47,6 +47,9 @@ public class User implements UserDetails {
     @OneToMany(cascade = ALL, mappedBy = "user")
     private List<UserPayment> userPaymentList;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orderList;
+
     @OneToMany(mappedBy = "user", cascade = ALL, fetch = EAGER)
     @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
