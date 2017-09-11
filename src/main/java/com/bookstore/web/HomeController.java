@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.security.Principal;
@@ -81,9 +82,16 @@ public class HomeController {
     }
 
     @RequestMapping("/bookshelf")
-    public String bookshelf(Model model) {
+    public String bookshelf(Model model, Principal principal) {
+        if(principal != null) {
+            String username = principal.getName();
+            User user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
         List<Book> bookList = bookService.findAll();
         model.addAttribute("bookList", bookList);
+        model.addAttribute("activeAll",true);
 
         return "bookshelf";
     }
