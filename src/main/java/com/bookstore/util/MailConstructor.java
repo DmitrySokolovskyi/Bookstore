@@ -12,7 +12,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.Locale;
 
 @Component
@@ -45,16 +44,12 @@ public class MailConstructor {
         context.setVariable("cartItemList", order.getCartItemList());
         String text = templateEngine.process("orderConfirmationEmailTemplate", context);
 
-        MimeMessagePreparator messagePreparator = new MimeMessagePreparator() {
-            @Override
-            public void prepare(MimeMessage mimeMessage) throws Exception {
-                MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
-                email.setTo(user.getEmail());
-                email.setSubject("Order Confirmation - " + order.getId());
-                email.setText(text, true);
-                email.setFrom(new InternetAddress("dmitry.sokolovskyi@gmail.com"));
-            }
+        return mimeMessage -> {
+            MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
+            email.setTo(user.getEmail());
+            email.setSubject("Order Confirmation - " + order.getId());
+            email.setText(text, true);
+            email.setFrom(new InternetAddress("dmitry.sokolovskyi@gmail.com"));
         };
-        return messagePreparator;
     }
 }
